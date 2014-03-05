@@ -4,7 +4,7 @@ var expect   = require('expect.js'),
     _str    = require('underscore.string')
     fixtures = helpers.fixtures;
 
-describe('TestStore', function () {
+describe('Test', function () {
   var test;
 
   beforeEach(function (done) {

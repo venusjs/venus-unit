@@ -51,4 +51,15 @@ VenusUnit.prototype.bindEvents = function (venus) {
  */
 VenusUnit.prototype.onStart = function () {
   this.log('init venus unit, running tests:', this.venus.config.tests);
+  this.venus.emit('venus-http:register-namespace', 'venus-unit', this.onHttpRequest, this);
+};
+
+/**
+ * @method onHttpRequest
+ * @param {http.Request} request
+ * @param {http.Response} response
+ */
+VenusUnit.prototype.onHttpRequest = function (request, response) {
+  console.log('hello from VenusUnit');
+  response.end('VenusUnit is in da house');
 };
