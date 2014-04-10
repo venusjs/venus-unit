@@ -1,5 +1,6 @@
-var glob = require('glob'),
-    path = require('path');
+var glob   = require('glob'),
+    path   = require('path'),
+    Router = require('./lib/Router');
 
 module.exports = VenusUnit;
 
@@ -8,10 +9,12 @@ module.exports = VenusUnit;
  * @constructor
  * @param {Venus} venus context object
  */
-function VenusUnit(venus) {
-  this.venus = venus;
-  this.info  = venus.info;
-  this.debug = venus.debug;
+function VenusUnit(venus, config) {
+  this.venus  = venus;
+  this.info   = venus.info;
+  this.debug  = venus.debug;
+  this.config = config;
+  this.router = new Router();
 
   this.bindEvents(venus);
   this.buildTests(venus);
@@ -56,14 +59,6 @@ VenusUnit.prototype.bindEvents = function (venus) {
  */
 VenusUnit.prototype.onStart = function () {
   this.info('init venus unit, running tests:', this.venus.config.tests);
-  this.venus.emit('venus-http:register-namespace', 'venus-unit', this.onHttpRequest, this);
+  this.venus.emit('venus-http:register-namespace', 'venus-unit', this.router.onHttpRequest, this.router);
 };
 
-/**
- * @method onHttpRequest
- * @param {http.Request} request
- * @param {http.Response} response
- */
-VenusUnit.prototype.onHttpRequest = function (request, response) {
-  response.end('VenusUnit is in da house');
-};
