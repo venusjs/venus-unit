@@ -20,7 +20,7 @@ describe('Test', function () {
 
   it('should read full spec source', function (done) {
     test.source().then(function (data) {
-      expect(data.length).to.be(111);
+      expect(data.length).to.be(105);
       done();
     });
   });
