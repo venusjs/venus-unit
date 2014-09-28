@@ -1,27 +1,29 @@
-var expect   = require('expect.js'),
-    Test     = require('../../../lib/Test'),
-    helpers  = require('../../helpers'),
-    _str    = require('underscore.string')
-    fixtures = helpers.fixtures;
+var Test = v.lib('Test');
 
 describe('Test', function () {
   var test;
 
   beforeEach(function (done) {
-    test = new Test(fixtures.spec('a.spec.js').path);
-    test.load().then(done);
+    test = new Test(v.path('fixtures', 'specs', 'b.spec.js'));
+    test.load().then(function () { done(); });
   });
 
   it('should set correct `code` value', function () {
-    expect(test.code.length).to.be(2);
-    expect(_str.endsWith(test.code[0], 'venus-unit/test/fixtures/specs/a.spec.js')).to.be(true);
-    expect(_str.endsWith(test.code[1], 'venus-unit/test/fixtures/specs/foo.js')).to.be(true);
+    v.assert.equal(test.config.code.length, 1);
+    v.assert.equal(test.config.code[0].path, v.path('fixtures', 'code', 'biz.js'));
   });
 
   it('should read full spec source', function (done) {
+    var len = v.fixture('specs', 'b.spec.js').length;
+
     test.source().then(function (data) {
-      expect(data.length).to.be(105);
-      done();
-    });
+      v.assert.equal(data.length, len);
+    }).then(done, done);
+  });
+
+  it('should return all data needed to render a test', function (done) {
+    test.ctx().then(function (ctx) {
+      console.log(ctx);
+    }).then(done, done);
   });
 });

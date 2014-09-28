@@ -1,23 +1,16 @@
-var glob   = require('glob'),
-    path   = require('path'),
-    Router = require('./lib/Router');
+var Router    = require('./lib/Router');
+var TestStore = require('./lib/TestStore');
 
 module.exports = VenusUnit;
 
 /**
- * @class VenusUnit
  * @constructor
- * @param {Venus} venus context object
+ * @param {Venus} venus Context object
  */
-function VenusUnit(venus, config) {
+function VenusUnit(venus) {
   this.venus  = venus;
-  this.info   = venus.info;
-  this.debug  = venus.debug;
-  this.config = config;
-  this.router = new Router();
-
-  this.bindEvents(venus);
-  this.buildTests(venus);
+  this.router = new Router(venus, this);
+  this.store  = new TestStore(this);
 };
 
 /**
@@ -26,39 +19,33 @@ function VenusUnit(venus, config) {
 VenusUnit.prototype.name = 'venus-unit';
 
 /**
- * @method buildTests
- * @param {Venus} venus context object
+ * Initialize
  */
-VenusUnit.prototype.buildTests = function (venus) {
-  var tests = venus.config.tests;
+VenusUnit.prototype.init = function () {
+  var testData = this.venus.config.getWithMeta('tests');
+  var tests    = testData.value;
+  var cwd      = testData.meta.dir || process.cwd();
 
-  if (!tests) {
-    this.info('No tests specified in config options');
-    return;
-  }
-
-  this.info(this.info.yellow(tests));
-  testPaths = glob.sync(tests).map(function (file) {
-    return path.resolve(process.cwd(), file);
-  });
-
+  this.store.init(tests, cwd);
 };
 
 /**
- * @method bindEvents
- * @param {Venus} venus context object
+ * Attach
  */
-VenusUnit.prototype.bindEvents = function (venus) {
-  var events = this.venus.events;
-
-  venus.on(events.VC_START, this.onStart.bind(this));
+VenusUnit.prototype.attach = function () {
+  this.venus.plugins['venus-http'].addNamespaceHandler('venus-unit', this.router.onHttpRequest, this.router);
 };
+
 
 /**
  * @method onStart
  */
-VenusUnit.prototype.onStart = function () {
-  this.info('init venus unit, running tests:', this.venus.config.tests);
-  this.venus.emit('venus-http:register-namespace', 'venus-unit', this.router.onHttpRequest, this.router);
+VenusUnit.prototype.run = function () {
+  console.log(this.store);
+  // Promise.all(this.tests.map(function (test) {
+    // return test.load();
+  // })).then(function () {
+    // this.info('init venus unit, running tests:', this.tests);
+  // }.bind(this));
 };
 
