@@ -1,6 +1,6 @@
 {
   "name": "venus-unit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Venus plugin for unit testing.",
   "main": "index.js",
   "directories": {
