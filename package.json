@@ -29,6 +29,7 @@
     "q": "~1.0.1",
     "require-dir": "^0.1.0",
     "through": "~2.3.4",
+    "through2": "^0.6.2",
     "underscore.string": "~2.3.3",
     "when": "~2.8.0"
   }
