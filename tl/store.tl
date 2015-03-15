@@ -2,12 +2,14 @@
 <html>
 <head>
   <title>Store</title>
+  <link rel="stylesheet" type="text/css" href="/venus-unit/static/css/style.css" />
 </head>
 <body>
+  <h1>Loaded spec files:</h1>
   <ul>
-    {{#tests}}
+    {{#specs}}
     <li>{{{fsPath}}}</li>
-    {{/tests}}
+    {{/specs}}
   </ul>
 </body>
 </html>

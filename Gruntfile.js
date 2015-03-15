@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean : {
-      doc : 'doc',
+      doc : 'jsdoc',
       unit : 'coverage/unit'
     },
     eslint: {
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
       dist : {
         src: ['lib/**/*.js'],
         options: {
-          destination: 'doc'
+          destination: 'jsdoc'
         }
       }
     },
